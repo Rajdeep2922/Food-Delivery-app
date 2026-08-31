@@ -1,0 +1,37 @@
+.admin-login-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: var(--soft-cloud);
+}
+
+.admin-login-card {
+  width: 100%;
+  max-width: 400px;
+  background: var(--canvas);
+  border: 1.5px solid var(--hairline-soft);
+  padding: 40px 36px;
+}
+
+.admin-login-logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 28px;
+  margin-bottom: 28px;
+}
+
+.admin-login-error {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  background: #fff0f0;
+  border: 1px solid #fdd;
+  border-radius: 4px;
+  font-size: 13px;
+  color: var(--sale);
+  margin-bottom: 16px;
+}
