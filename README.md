@@ -3,11 +3,10 @@
 [![React](https://img.shields.io/badge/Frontend-React%2018%20%2B%20Vite-61DAFB?logo=react&logoColor=black)](https://reactjs.org/)
 [![Node.js](https://img.shields.io/badge/Backend-Node.js%20%2B%20Express-339933?logo=node.js&logoColor=white)](https://nodejs.org/)
 [![MongoDB](https://img.shields.io/badge/Database-MongoDB%20%2B%20Mongoose-47A248?logo=mongodb&logoColor=white)](https://www.mongodb.com/)
-[![Stripe](https://img.shields.io/badge/Payments-Stripe-008CDD?logo=stripe&logoColor=white)](https://stripe.com/)
 [![JWT](https://img.shields.io/badge/Auth-JWT%20Tokens-000000?logo=jsonwebtokens&logoColor=white)](https://jwt.io/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-> **Good Food. No Wait.** — A full-stack MERN food delivery platform featuring a customer storefront, real-time order tracking, Stripe payments, and a dedicated admin management portal.
+> **Good Food. No Wait.** — A full-stack MERN food delivery platform featuring a customer storefront, real-time order tracking, checkout, and a dedicated admin management portal. (Built as a course capstone project)
 
 ---
 
@@ -29,14 +28,14 @@ forklane/
 ### 🛒 Customer Storefront (`/client`)
 - **Food Discovery**: Interactive catalog with category filters, dynamic search, and dish detail pages.
 - **Cart & Order Flow**: Dynamic cart drawer/page, quantity adjustments, and live price recalculation.
-- **Stripe & COD Checkout**: Secure card payments powered by Stripe alongside Cash on Delivery options.
+- **Seamless Checkout**: Multiple payment options alongside Cash on Delivery (COD).
 - **Live Order Tracking**: Visual progress bar tracking order statuses from `Placed` to `Delivered`.
 - **User Authentication**: JWT-based authentication with protected profile and order history pages.
 
 ### 🛠️ Admin Management Portal (`/admin`)
 - **Executive Dashboard**: KPI metrics, sales revenue summaries, total orders, and product count.
 - **Product Management**: Full CRUD operations with image uploads (via Multer), category assignments, and pricing.
-- **Live Order Management**: Real-time order status advancement pipeline (`Placed` ➔ `Confirmed` ➔ `Preparing` ➔ `Out for Delivery` ➔ `Delivered`) and order cancellation with automated Stripe refund support.
+- **Live Order Management**: Real-time order status advancement pipeline (`Placed` ➔ `Confirmed` ➔ `Preparing` ➔ `Out for Delivery` ➔ `Delivered`) and order cancellation.
 - **Secure Admin Auth**: Role-based access control with secret-key guarded admin registration.
 
 ### ⚙️ REST API Backend (`/backend`)
@@ -55,7 +54,6 @@ forklane/
 | **Backend API** | Node.js, Express.js |
 | **Database & ODM** | MongoDB, Mongoose |
 | **Authentication** | JSON Web Tokens (JWT), Bcrypt.js |
-| **Payments** | Stripe API |
 | **File Storage** | Multer (Local disk upload pipeline) |
 | **Notifications** | React Hot Toast |
 
