@@ -1,0 +1,10 @@
+{
+  "buildCommand": "cd forklane/client && npm install && npm run build",
+  "outputDirectory": "forklane/client/dist",
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/forklane/client/dist/index.html"
+    }
+  ]
+}
