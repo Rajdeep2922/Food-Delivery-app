@@ -1,0 +1,94 @@
+.checkout-page { padding: var(--space-6) 0 var(--space-10); }
+
+.checkout-page__heading { margin-bottom: var(--space-5); }
+
+.checkout-form {
+  max-width: 680px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.checkout-section {
+  border: 1.5px solid var(--hairline-soft);
+  padding: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.checkout-section__title {
+  font-size: 16px;
+  font-weight: 700;
+  padding-bottom: var(--space-2);
+  border-bottom: 1px solid var(--hairline-soft);
+}
+
+.form-input--readonly {
+  background: var(--soft-cloud);
+  color: var(--ash);
+  cursor: default;
+}
+
+/* Payment options */
+.payment-options {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.payment-option {
+  display: block;
+  border: 1.5px solid var(--hairline);
+  padding: var(--space-2) var(--space-3);
+  cursor: pointer;
+  transition: border-color var(--transition);
+}
+
+.payment-option:hover { border-color: var(--ash); }
+.payment-option.selected { border-color: var(--ink); }
+
+.payment-option__radio { position: absolute; opacity: 0; width: 0; height: 0; }
+
+.payment-option__body {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.payment-option__icon { font-size: 24px; }
+
+/* Stripe card */
+.stripe-card-wrap {
+  padding: var(--space-3);
+  background: var(--soft-cloud);
+  border: 1.5px solid var(--hairline);
+}
+
+.stripe-card-element {
+  padding: 14px 16px;
+  background: var(--canvas);
+  border: 1.5px solid var(--hairline);
+}
+
+/* Summary */
+.checkout-items {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.checkout-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.checkout-item--total { padding-top: 8px; }
+
+.checkout-submit { width: 100%; }
+
+@media (max-width: 480px) {
+  .checkout-section { padding: var(--space-3); }
+}

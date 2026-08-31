@@ -1,0 +1,87 @@
+/* ── Offers Page Styles ── */
+.offers-page {
+  padding: var(--space-6) 0 var(--space-10);
+}
+
+.offers-page__header {
+  margin-bottom: var(--space-6);
+}
+
+.offers-headline {
+  font-size: clamp(36px, 7vw, 72px);
+  margin-top: 4px;
+}
+
+/* Coupon grid */
+.coupon-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-3);
+}
+
+@media (max-width: 768px) {
+  .coupon-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.coupon-card {
+  background: var(--canvas);
+  border: 1.5px dashed var(--hairline);
+  padding: var(--space-3);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: var(--space-2);
+  position: relative;
+  transition: border-color var(--transition);
+}
+
+.coupon-card:hover {
+  border-color: var(--ink);
+}
+
+.coupon-card__badge-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.coupon-card__body {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.coupon-card__discount {
+  font-family: var(--font-hero);
+  font-size: 32px;
+  line-height: 1;
+  color: var(--sale);
+  letter-spacing: 0.02em;
+}
+
+.coupon-card__title {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.coupon-card__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: var(--space-2);
+  border-top: 1px solid var(--hairline-soft);
+  margin-top: 4px;
+}
+
+.coupon-code {
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--ink);
+  background: var(--soft-cloud);
+  padding: 4px 12px;
+  border-radius: var(--radius-sm);
+}

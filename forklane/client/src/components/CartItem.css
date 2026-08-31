@@ -1,0 +1,105 @@
+.cart-item {
+  display: grid;
+  grid-template-columns: 72px 1fr auto;
+  gap: var(--space-2);
+  align-items: center;
+  padding: var(--space-2) 0;
+  border-bottom: 1px solid var(--hairline-soft);
+}
+
+.cart-item__image-wrap {
+  width: 72px;
+  height: 72px;
+  background: var(--soft-cloud);
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.cart-item__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.cart-item__info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.cart-item__name {
+  font-size: 15px;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cart-item__unit-price { color: var(--mute); }
+
+/* Controls */
+.cart-item__controls {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex-shrink: 0;
+}
+
+.cart-item__qty {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  border: 1.5px solid var(--hairline);
+  border-radius: var(--radius-pill);
+  padding: 2px;
+}
+
+.qty-btn {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  color: var(--ink);
+  transition: background var(--transition);
+}
+
+.qty-btn:hover { background: var(--soft-cloud); }
+
+.qty-value {
+  min-width: 28px;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.cart-item__total {
+  font-size: 16px;
+  font-weight: 700;
+  min-width: 64px;
+  text-align: right;
+}
+
+.cart-item__remove {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  color: var(--mute);
+  transition: color var(--transition), background var(--transition);
+}
+
+.cart-item__remove:hover {
+  color: var(--sale);
+  background: #fff0f0;
+}
+
+@media (max-width: 480px) {
+  .cart-item { grid-template-columns: 60px 1fr; gap: var(--space-1); }
+  .cart-item__controls { grid-column: 1 / -1; justify-content: space-between; }
+  .cart-item__image-wrap { width: 60px; height: 60px; }
+}

@@ -1,0 +1,45 @@
+.category-filter {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  padding: 4px 0;
+}
+
+.category-filter::-webkit-scrollbar { display: none; }
+
+.category-filter__track {
+  display: flex;
+  gap: 8px;
+  white-space: nowrap;
+}
+
+.category-filter__btn {
+  height: 36px;
+  padding: 0 20px;
+  border-radius: var(--radius-pill);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ash);
+  background: var(--soft-cloud);
+  border: 1.5px solid transparent;
+  transition: all var(--transition);
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.category-filter__btn:hover {
+  background: var(--hairline-soft);
+  color: var(--ink);
+}
+
+.category-filter__btn.active {
+  background: var(--ink);
+  color: var(--canvas);
+  border-color: var(--ink);
+}
+
+.category-filter__btn:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 2px;
+}

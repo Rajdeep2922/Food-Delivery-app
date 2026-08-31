@@ -1,0 +1,18 @@
+.menu-page { padding: var(--space-6) 0 var(--space-10); }
+
+.menu-page__header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: var(--space-4);
+  gap: var(--space-2);
+}
+
+.menu-page__controls {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin-bottom: var(--space-5);
+}
+
+.menu-page__grid-wrap { min-height: 40vh; }

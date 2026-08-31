@@ -1,0 +1,20 @@
+.orders-page { padding: var(--space-6) 0 var(--space-10); }
+
+.orders-section { margin-bottom: var(--space-6); }
+
+.orders-section__title {
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--stone);
+  margin-bottom: var(--space-3);
+  padding-bottom: var(--space-1);
+  border-bottom: 1px solid var(--hairline-soft);
+}
+
+.orders-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
