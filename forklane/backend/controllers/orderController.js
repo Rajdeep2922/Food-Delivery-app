@@ -15,7 +15,7 @@ const STATUS_TRANSITIONS = {
 // @access  Private (user)
 const createOrder = async (req, res, next) => {
   try {
-    const { items, deliveryAddress, phone, paymentMethod } = req.body;
+    const { items, deliveryAddress, phone, paymentMethod, couponCode } = req.body;
 
     if (!items || !Array.isArray(items) || items.length === 0) {
       return res.status(400).json({ success: false, message: 'Order must have at least one item' });
@@ -66,6 +66,30 @@ const createOrder = async (req, res, next) => {
       });
     }
 
+    // Compute delivery fee and validate coupon discount server-side
+    const deliveryFee = totalAmount >= 499 ? 0 : 49;
+    let discountAmount = 0;
+    let validCoupon = '';
+
+    if (couponCode && typeof couponCode === 'string') {
+      const code = couponCode.toUpperCase().trim();
+      if (code === 'FORKLANE') {
+        discountAmount = deliveryFee > 0 ? deliveryFee : 49;
+        validCoupon = 'FORKLANE';
+      } else if (code === 'FEAST50') {
+        discountAmount = Math.min(Math.round(totalAmount * 0.5), 150);
+        validCoupon = 'FEAST50';
+      } else if (code === 'WELCOME20' || code === 'WEEKEND20') {
+        discountAmount = Math.round(totalAmount * 0.2);
+        validCoupon = code;
+      } else if ((code === 'SWEET10' || code === 'SWEET100') && totalAmount >= 299) {
+        discountAmount = Math.min(100, totalAmount);
+        validCoupon = code;
+      }
+    }
+
+    const finalTotal = Math.max(0, totalAmount + deliveryFee - discountAmount);
+
     // For Stripe: create a PaymentIntent
     let stripePaymentIntentId = '';
     let clientSecret = null;
@@ -75,7 +99,7 @@ const createOrder = async (req, res, next) => {
         return res.status(500).json({ success: false, message: 'Stripe is not configured on this server' });
       }
       const paymentIntent = await stripe.paymentIntents.create({
-        amount: Math.round(totalAmount * 100), // in paise/cents
+        amount: Math.round(finalTotal * 100), // in paise/cents
         currency: 'inr',
         metadata: { userId: req.user._id.toString() },
       });
@@ -86,13 +110,16 @@ const createOrder = async (req, res, next) => {
     const order = await Order.create({
       user: req.user._id,
       items: orderItems,
-      totalAmount,
+      totalAmount: finalTotal,
       deliveryAddress,
       phone,
       paymentMethod,
       paymentStatus: 'PENDING',
       orderStatus: 'PLACED',
       stripePaymentIntentId,
+      couponCode: validCoupon,
+      discountAmount,
+      deliveryFee,
     });
 
     const response = {

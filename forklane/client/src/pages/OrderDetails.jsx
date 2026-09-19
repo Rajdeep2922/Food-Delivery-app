@@ -3,6 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import { orderAPI } from '../services/api';
 import OrderTracker from '../components/OrderTracker';
 import Loading from '../components/Loading';
+import BackButton from '../components/BackButton';
 import './OrderDetails.css';
 
 const STATUS_LABELS = {
@@ -63,10 +64,7 @@ const OrderDetails = () => {
   return (
     <main className="order-details-page page-enter">
       <div className="container">
-        {/* Back link */}
-        <Link to="/orders" className="order-details__back caption text-mute">
-          ← Back to Orders
-        </Link>
+        <BackButton label="Back to Orders" to="/orders" />
 
         <div className="order-details__header">
           <div>
@@ -144,6 +142,20 @@ const OrderDetails = () => {
                 <span className={`status-chip ${order.paymentStatus === 'PAID' ? 'status-paid' : order.paymentStatus === 'FAILED' ? 'status-cancelled' : 'status-pending'}`}>
                   {order.paymentStatus}
                 </span>
+                {order.deliveryFee !== undefined && (
+                  <>
+                    <span className="caption text-mute">Delivery Fee</span>
+                    <span className="caption">{order.deliveryFee === 0 ? 'Free' : `₹${order.deliveryFee.toFixed(2)}`}</span>
+                  </>
+                )}
+                {order.discountAmount > 0 && (
+                  <>
+                    <span className="caption text-mute">Coupon ({order.couponCode})</span>
+                    <span className="caption text-success" style={{ fontWeight: 600, color: 'var(--success, #007d48)' }}>
+                      -₹{order.discountAmount.toFixed(2)}
+                    </span>
+                  </>
+                )}
                 <span className="caption text-mute">Total</span>
                 <span className="heading-sm">₹{order.totalAmount.toFixed(2)}</span>
               </div>
