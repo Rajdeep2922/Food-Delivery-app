@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import { productAPI } from '../services/api';
 import FoodCard from '../components/FoodCard';
 import { ProductGridSkeleton } from '../components/Loading';
+import EmptyState from '../components/EmptyState';
+import BackButton from '../components/BackButton';
 import toast from 'react-hot-toast';
 import './Offers.css';
 
@@ -46,19 +48,18 @@ const Offers = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchDealProducts = async () => {
+    const fetchDeals = async () => {
       try {
         const { data } = await productAPI.getAll({});
         const products = data.products || [];
-        // Take a selection of dishes for the discounted deals section
-        setDealProducts(products.slice(0, 6));
+        setDealProducts(products.slice(0, 4));
       } catch {
-        // Handled silently
+        // silent
       } finally {
         setLoading(false);
       }
     };
-    fetchDealProducts();
+    fetchDeals();
   }, []);
 
   const copyCode = (code) => {
@@ -71,6 +72,7 @@ const Offers = () => {
   return (
     <main className="offers-page page-enter">
       <div className="container">
+        <BackButton label="Back to Home" to="/" />
         {/* Header */}
         <div className="offers-page__header">
           <p className="caption text-mute" style={{ textTransform: 'uppercase', letterSpacing: '0.08em' }}>

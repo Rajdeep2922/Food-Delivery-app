@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import CartItem from '../components/CartItem';
 import EmptyState from '../components/EmptyState';
+import BackButton from '../components/BackButton';
 import './Cart.css';
 
 const Cart = () => {
@@ -11,6 +12,7 @@ const Cart = () => {
     return (
       <main className="cart-page page-enter">
         <div className="container">
+          <BackButton label="Back to Menu" to="/menu" />
           <h1 className="heading-xl" style={{ marginBottom: 40 }}>Your Cart</h1>
           <EmptyState
             icon="🛒"
@@ -29,6 +31,7 @@ const Cart = () => {
   return (
     <main className="cart-page page-enter">
       <div className="container">
+        <BackButton label="Back to Menu" to="/menu" />
         <div className="cart-page__header">
           <h1 className="heading-xl">Your Cart</h1>
           <button className="btn btn-secondary btn-sm" onClick={clearCart}>

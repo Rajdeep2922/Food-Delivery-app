@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import BackButton from '../components/BackButton';
 import toast from 'react-hot-toast';
 import './Auth.css';
 
@@ -59,6 +60,9 @@ const Register = () => {
 
   return (
     <main className="auth-page page-enter">
+      <div style={{ width: '100%', maxWidth: 540, marginBottom: 12 }}>
+        <BackButton label="Back to Home" to="/" />
+      </div>
       <div className="auth-card auth-card--wide">
         <div className="auth-card__header">
           <Link to="/" className="auth-logo">

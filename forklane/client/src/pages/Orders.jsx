@@ -3,6 +3,7 @@ import { orderAPI } from '../services/api';
 import OrderCard from '../components/OrderCard';
 import Loading from '../components/Loading';
 import EmptyState from '../components/EmptyState';
+import BackButton from '../components/BackButton';
 import './Orders.css';
 
 const Orders = () => {
@@ -36,6 +37,7 @@ const Orders = () => {
   return (
     <main className="orders-page page-enter">
       <div className="container">
+        <BackButton label="Back to Menu" to="/menu" />
         <h1 className="heading-xl" style={{ marginBottom: 'var(--space-5)' }}>My Orders</h1>
 
         {error ? (

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import BackButton from '../components/BackButton';
 import toast from 'react-hot-toast';
 import './Auth.css';
 
@@ -44,6 +45,9 @@ const Login = () => {
 
   return (
     <main className="auth-page page-enter">
+      <div style={{ width: '100%', maxWidth: 440, marginBottom: 12 }}>
+        <BackButton label="Back to Home" to="/" />
+      </div>
       <div className="auth-card">
         <div className="auth-card__header">
           <Link to="/" className="auth-logo">

@@ -3,6 +3,7 @@ import { useParams, useNavigate, Link } from 'react-router-dom';
 import { productAPI } from '../services/api';
 import { useCart } from '../context/CartContext';
 import Loading from '../components/Loading';
+import BackButton from '../components/BackButton';
 import toast from 'react-hot-toast';
 import './ProductDetails.css';
 
@@ -59,6 +60,7 @@ const ProductDetails = () => {
   return (
     <main className="product-details page-enter">
       <div className="container">
+        <BackButton label="Back to Menu" to="/menu" />
         {/* Breadcrumb */}
         <nav className="product-details__breadcrumb caption text-mute" aria-label="Breadcrumb">
           <Link to="/">Home</Link>

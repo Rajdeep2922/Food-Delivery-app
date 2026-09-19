@@ -1,0 +1,31 @@
+.back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: transparent;
+  border: 1.5px solid var(--hairline);
+  border-radius: var(--radius-pill);
+  padding: 6px 14px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--ash);
+  cursor: pointer;
+  transition: all var(--transition);
+  margin-bottom: var(--space-3);
+  text-decoration: none;
+}
+
+.back-btn:hover {
+  color: var(--ink);
+  background: var(--soft-cloud);
+  border-color: var(--ink);
+  transform: translateX(-2px);
+}
+
+.back-btn svg {
+  transition: transform var(--transition);
+}
+
+.back-btn:hover svg {
+  transform: translateX(-2px);
+}

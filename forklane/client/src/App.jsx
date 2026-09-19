@@ -5,6 +5,7 @@ import { CartProvider } from './context/CartContext';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import ProtectedRoute from './components/ProtectedRoute';
+import ScrollToTop from './components/ScrollToTop';
 
 // Pages
 import Home from './pages/Home';
@@ -21,7 +22,8 @@ import Profile from './pages/Profile';
 
 const App = () => {
   return (
-    <Router>
+    <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+      <ScrollToTop />
       <AuthProvider>
         <CartProvider>
           <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
