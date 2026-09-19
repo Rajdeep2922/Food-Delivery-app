@@ -5,21 +5,23 @@ const CartContext = createContext(null);
 const CART_KEY = 'forklane_cart';
 
 export const CartProvider = ({ children }) => {
-  const [cart, setCart] = useState([]);
-
-  // Load from localStorage on mount
-  useEffect(() => {
+  // Synchronously initialize cart from localStorage so it never resets to empty on mount/reload
+  const [cart, setCart] = useState(() => {
     try {
       const stored = localStorage.getItem(CART_KEY);
-      if (stored) setCart(JSON.parse(stored));
+      return stored ? JSON.parse(stored) : [];
     } catch {
-      setCart([]);
+      return [];
     }
-  }, []);
+  });
 
   // Persist to localStorage whenever cart changes
   useEffect(() => {
-    localStorage.setItem(CART_KEY, JSON.stringify(cart));
+    try {
+      localStorage.setItem(CART_KEY, JSON.stringify(cart));
+    } catch (e) {
+      console.error('Failed to save cart to localStorage', e);
+    }
   }, [cart]);
 
   const addToCart = useCallback((product) => {
