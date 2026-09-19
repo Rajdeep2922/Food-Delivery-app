@@ -6,7 +6,7 @@
 
 .footer__grid {
   display: grid;
-  grid-template-columns: 2fr 1fr 1fr 1fr;
+  grid-template-columns: 2fr 1fr 1fr;
   gap: var(--space-6);
 }
 
@@ -50,29 +50,6 @@
 
 .footer__col a:hover { color: var(--ink); }
 
-.footer__bottom {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--space-2);
-  flex-wrap: wrap;
-}
-
-.footer__payment-badges {
-  display: flex;
-  gap: 6px;
-}
-
-.payment-badge {
-  padding: 4px 10px;
-  border: 1px solid var(--hairline);
-  border-radius: var(--radius-sm);
-  font-size: 11px;
-  font-weight: 600;
-  color: var(--mute);
-  background: var(--canvas);
-}
-
 @media (max-width: 960px) {
   .footer__grid {
     grid-template-columns: 1fr 1fr;
@@ -82,5 +59,4 @@
 
 @media (max-width: 480px) {
   .footer__grid { grid-template-columns: 1fr; }
-  .footer__bottom { flex-direction: column; align-items: flex-start; }
 }

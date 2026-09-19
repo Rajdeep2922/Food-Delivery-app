@@ -2,8 +2,6 @@ import { Link } from 'react-router-dom';
 import './Footer.css';
 
 const Footer = () => {
-  const year = new Date().getFullYear();
-
   return (
     <footer className="footer">
       <div className="container">
@@ -41,29 +39,6 @@ const Footer = () => {
               <li><Link to="/profile">My Profile</Link></li>
               <li><Link to="/cart">Cart</Link></li>
             </ul>
-          </div>
-
-          <div className="footer__col">
-            <h4 className="footer__heading">Support</h4>
-            <ul>
-              <li><a href="#">Help Center</a></li>
-              <li><a href="#">Track Order</a></li>
-              <li><a href="#">Refund Policy</a></li>
-              <li><a href="#">Privacy Policy</a></li>
-              <li><a href="#">Terms of Service</a></li>
-            </ul>
-          </div>
-        </div>
-
-        <hr className="divider" style={{ margin: '32px 0 24px' }} />
-
-        <div className="footer__bottom">
-          <p className="caption text-mute">© {year} ForkLane. All rights reserved.</p>
-          <div className="footer__payment-badges">
-            <span className="payment-badge">Visa</span>
-            <span className="payment-badge">Mastercard</span>
-            <span className="payment-badge">Stripe</span>
-            <span className="payment-badge">COD</span>
           </div>
         </div>
       </div>
