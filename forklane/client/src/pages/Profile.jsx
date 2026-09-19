@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { authAPI } from '../services/api';
+import BackButton from '../components/BackButton';
 import toast from 'react-hot-toast';
 import './Profile.css';
 
@@ -13,6 +14,32 @@ const Profile = () => {
     address: user?.address || '',
   });
   const [loading, setLoading] = useState(false);
+
+  // Keep form in sync when user object updates
+  useEffect(() => {
+    if (user) {
+      setForm({
+        name: user.name || '',
+        phone: user.phone || '',
+        address: user.address || '',
+      });
+    }
+  }, [user]);
+
+  // Fetch fresh profile data on mount
+  useEffect(() => {
+    const fetchProfile = async () => {
+      try {
+        const { data } = await authAPI.getProfile();
+        if (data?.user) {
+          updateUser(data.user);
+        }
+      } catch (err) {
+        console.error('Failed to refresh profile', err);
+      }
+    };
+    fetchProfile();
+  }, []);
 
   const handleChange = (e) => {
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -37,6 +64,9 @@ const Profile = () => {
   return (
     <main className="profile-page page-enter">
       <div className="container">
+        <div style={{ maxWidth: 640, margin: '0 auto 16px' }}>
+          <BackButton label="Back" />
+        </div>
         <div className="profile-card">
           <div className="profile-card__header">
             <div className="profile-avatar" aria-hidden="true">
@@ -88,7 +118,7 @@ const Profile = () => {
             <div className="profile-info">
               <h2 className="heading-md" style={{ marginBottom: 'var(--space-3)' }}>Account Details</h2>
 
-              <div className="info-grid">
+              <div className="profile-info-list">
                 {[
                   ['Name', user?.name],
                   ['Email', user?.email],
