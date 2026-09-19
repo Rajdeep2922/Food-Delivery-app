@@ -179,261 +179,335 @@ const CheckoutForm = ({ cart, cartTotal }) => {
     }
   };
 
+  const totalItemsCount = cart.reduce((sum, item) => sum + item.quantity, 0);
+
   return (
-    <form className="checkout-form" onSubmit={handleSubmit} noValidate>
-      {/* Delivery info */}
-      <section className="checkout-section">
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 8, paddingBottom: 'var(--space-2)', borderBottom: '1px solid var(--hairline-soft)' }}>
-          <h2 className="checkout-section__title" style={{ borderBottom: 'none', paddingBottom: 0, margin: 0 }}>
-            Delivery Information
-          </h2>
-          <Link to="/profile" className="caption" style={{ color: 'var(--ink)', textDecoration: 'underline', fontWeight: 500 }}>
-            Profile Settings
-          </Link>
-        </div>
+    <form className="checkout-layout" onSubmit={handleSubmit} noValidate>
+      {/* ── Left Column: Checkout Details ── */}
+      <div className="checkout-main">
+        {/* 1. Delivery Information Card */}
+        <section className="checkout-card">
+          <div className="checkout-card__header">
+            <div className="checkout-card__title-group">
+              <span className="checkout-card__icon-badge">📍</span>
+              <div>
+                <h2 className="checkout-card__title">Delivery Information</h2>
+                <p className="caption text-mute">Enter where you'd like your order delivered</p>
+              </div>
+            </div>
+            <Link to="/profile" className="checkout-card__link">
+              Profile Settings →
+            </Link>
+          </div>
 
-        <div className="form-group">
-          <label className="form-label" htmlFor="co-name">Full Name</label>
-          <input
-            id="co-name"
-            name="name"
-            type="text"
-            value={deliveryInfo.name}
-            onChange={handleDeliveryChange}
-            className="form-input"
-            placeholder="Enter your full name"
-            required
-          />
-        </div>
+          <div className="checkout-card__body">
+            <div className="checkout-form-grid">
+              <div className="form-group">
+                <label className="form-label" htmlFor="co-name">Full Name</label>
+                <input
+                  id="co-name"
+                  name="name"
+                  type="text"
+                  value={deliveryInfo.name}
+                  onChange={handleDeliveryChange}
+                  className="form-input"
+                  placeholder="e.g. John Doe"
+                  required
+                />
+              </div>
 
-        <div className="form-group">
-          <label className="form-label" htmlFor="co-phone">Phone Number</label>
-          <input
-            id="co-phone"
-            name="phone"
-            type="tel"
-            value={deliveryInfo.phone}
-            onChange={handleDeliveryChange}
-            className="form-input"
-            placeholder="e.g. 9876543210"
-            required
-          />
-        </div>
+              <div className="form-group">
+                <label className="form-label" htmlFor="co-phone">Phone Number</label>
+                <input
+                  id="co-phone"
+                  name="phone"
+                  type="tel"
+                  value={deliveryInfo.phone}
+                  onChange={handleDeliveryChange}
+                  className="form-input"
+                  placeholder="e.g. 9876543210"
+                  required
+                />
+              </div>
+            </div>
 
-        <div className="form-group">
-          <label className="form-label" htmlFor="co-address">Delivery Address</label>
-          <textarea
-            id="co-address"
-            name="address"
-            value={deliveryInfo.address}
-            onChange={handleDeliveryChange}
-            className="form-input form-textarea"
-            rows={3}
-            placeholder="Enter your complete delivery address (Street, Flat/House No., Area, City, Pincode)"
-            required
-          />
-        </div>
-      </section>
+            <div className="form-group" style={{ marginTop: 'var(--space-3)' }}>
+              <label className="form-label" htmlFor="co-address">Delivery Address</label>
+              <textarea
+                id="co-address"
+                name="address"
+                value={deliveryInfo.address}
+                onChange={handleDeliveryChange}
+                className="form-input form-textarea"
+                rows={3}
+                placeholder="Flat / House No., Apartment, Street, Landmark, Area & City"
+                required
+              />
+            </div>
 
-      {/* Coupons & Offers Section */}
-      <section className="checkout-section">
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 8, paddingBottom: 'var(--space-2)', borderBottom: '1px solid var(--hairline-soft)' }}>
-          <h2 className="checkout-section__title" style={{ borderBottom: 'none', paddingBottom: 0, margin: 0 }}>
-            Coupons & Offers
-          </h2>
-          <span className="caption text-mute">
-            {AVAILABLE_COUPONS.length} active coupons
-          </span>
-        </div>
+            <div className="delivery-estimate-pill">
+              <span className="delivery-estimate-pill__icon">⚡</span>
+              <span>Estimated Delivery: <strong>25–35 minutes</strong> to your door</span>
+            </div>
+          </div>
+        </section>
 
-        {/* Manual Coupon Input Box */}
-        <div className="checkout-coupon-form">
-          <input
-            type="text"
-            className="form-input checkout-coupon-input"
-            placeholder="ENTER COUPON CODE"
-            value={couponCodeInput}
-            onChange={(e) => setCouponCodeInput(e.target.value.toUpperCase())}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter') {
-                e.preventDefault();
-                handleApplyCoupon();
-              }
-            }}
-          />
-          <button
-            type="button"
-            className="btn btn-secondary"
-            onClick={() => handleApplyCoupon()}
-            disabled={!couponCodeInput.trim()}
-            style={{ padding: '0 20px', whiteSpace: 'nowrap' }}
-          >
-            Apply
-          </button>
-        </div>
+        {/* 2. Coupons & Offers Card */}
+        <section className="checkout-card">
+          <div className="checkout-card__header">
+            <div className="checkout-card__title-group">
+              <span className="checkout-card__icon-badge">🏷️</span>
+              <div>
+                <h2 className="checkout-card__title">Offers & Coupons</h2>
+                <p className="caption text-mute">Apply a coupon code for instant savings</p>
+              </div>
+            </div>
+            <span className="badge badge-sale">{AVAILABLE_COUPONS.length} AVAILABLE</span>
+          </div>
 
-        {appliedCoupon && (
-          <div className="checkout-applied-coupon">
-            <div className="checkout-applied-coupon__info">
-              <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                <span style={{ fontSize: 16 }}>🎉</span>
-                <span className="checkout-applied-coupon__title">
-                  '{appliedCoupon.code}' Applied!
+          <div className="checkout-card__body">
+            {/* Manual Coupon Input */}
+            <div className="checkout-coupon-input-wrap">
+              <input
+                type="text"
+                className="form-input checkout-coupon-input"
+                placeholder="ENTER COUPON CODE"
+                value={couponCodeInput}
+                onChange={(e) => setCouponCodeInput(e.target.value.toUpperCase())}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    e.preventDefault();
+                    handleApplyCoupon();
+                  }
+                }}
+              />
+              <button
+                type="button"
+                className="btn btn-secondary checkout-coupon-apply-action"
+                onClick={() => handleApplyCoupon()}
+                disabled={!couponCodeInput.trim()}
+              >
+                Apply Code
+              </button>
+            </div>
+
+            {/* Applied Coupon Banner */}
+            {appliedCoupon && (
+              <div className="checkout-applied-banner">
+                <div className="checkout-applied-banner__info">
+                  <div className="checkout-applied-banner__title-row">
+                    <span className="checkout-applied-banner__sparkle">🎉</span>
+                    <span className="checkout-applied-banner__code">
+                      '{appliedCoupon.code}' Applied!
+                    </span>
+                  </div>
+                  <p className="caption checkout-applied-banner__sub">
+                    You saved ₹{discountAmount.toFixed(2)} on this order
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  className="checkout-applied-banner__remove-btn"
+                  onClick={handleRemoveCoupon}
+                  aria-label="Remove coupon"
+                >
+                  Remove
+                </button>
+              </div>
+            )}
+
+            {/* Available Coupons List */}
+            <div className="checkout-coupons-grid">
+              {AVAILABLE_COUPONS.map((promo) => {
+                const isApplied = appliedCoupon?.code === promo.code;
+                const isEligible = !promo.minOrder || cartTotal >= promo.minOrder;
+
+                return (
+                  <div
+                    key={promo.code}
+                    className={`coupon-ticket${isApplied ? ' coupon-ticket--applied' : ''}${!isEligible ? ' coupon-ticket--disabled' : ''}`}
+                  >
+                    <div className="coupon-ticket__left">
+                      <div className="coupon-ticket__badges">
+                        <span className="coupon-ticket__code font-mono">{promo.code}</span>
+                        <span className="badge badge-sale">{promo.discountText}</span>
+                        {promo.minOrder === 0 ? (
+                          <span className="badge badge-pill-green">NO MIN ORDER</span>
+                        ) : (
+                          <span className="caption text-mute" style={{ fontSize: 11 }}>
+                            Min: ₹{promo.minOrder}
+                          </span>
+                        )}
+                      </div>
+                      <p className="coupon-ticket__title">{promo.title}</p>
+                      <p className="coupon-ticket__desc caption text-mute">{promo.description}</p>
+                    </div>
+
+                    <div className="coupon-ticket__right">
+                      {isApplied ? (
+                        <div className="coupon-ticket__applied-status">
+                          <span className="coupon-ticket__check">APPLIED ✓</span>
+                          <button
+                            type="button"
+                            className="coupon-ticket__remove-link"
+                            onClick={handleRemoveCoupon}
+                          >
+                            Remove
+                          </button>
+                        </div>
+                      ) : (
+                        <button
+                          type="button"
+                          className={`btn btn-sm ${isEligible ? 'btn-primary' : 'btn-secondary'}`}
+                          onClick={() => handleApplyCoupon(promo.code)}
+                        >
+                          Apply
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </section>
+
+        {/* 3. Payment Method Card */}
+        <section className="checkout-card">
+          <div className="checkout-card__header">
+            <div className="checkout-card__title-group">
+              <span className="checkout-card__icon-badge">💵</span>
+              <div>
+                <h2 className="checkout-card__title">Payment Method</h2>
+                <p className="caption text-mute">Choose how you'd like to pay</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="checkout-card__body">
+            <div className="payment-method-card selected">
+              <div className="payment-method-card__radio">
+                <div className="payment-method-card__radio-dot" />
+              </div>
+              <div className="payment-method-card__icon">💵</div>
+              <div className="payment-method-card__details">
+                <div className="payment-method-card__header-row">
+                  <span className="heading-sm">Cash on Delivery (COD)</span>
+                  <span className="badge badge-new">Recommended</span>
+                </div>
+                <p className="caption text-mute">
+                  Pay via Cash or any UPI App (GPay, PhonePe, Paytm) upon doorstep delivery.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      {/* ── Right Column: Sticky Summary ── */}
+      <aside className="checkout-sidebar">
+        <section className="checkout-card checkout-card--summary">
+          <div className="checkout-card__header">
+            <div className="checkout-card__title-group">
+              <span className="checkout-card__icon-badge">🧾</span>
+              <div>
+                <h2 className="checkout-card__title">Order Summary</h2>
+                <p className="caption text-mute">{totalItemsCount} {totalItemsCount === 1 ? 'item' : 'items'} in your order</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="checkout-card__body">
+            {/* Items List */}
+            <div className="summary-items">
+              {cart.map((item) => (
+                <div key={item._id} className="summary-item">
+                  <div className="summary-item__info">
+                    <span className="summary-item__qty">{item.quantity}×</span>
+                    <span className="summary-item__name">{item.name}</span>
+                  </div>
+                  <span className="summary-item__price">₹{(item.price * item.quantity).toFixed(2)}</span>
+                </div>
+              ))}
+            </div>
+
+            <hr className="divider" style={{ margin: '16px 0' }} />
+
+            {/* Bill Details */}
+            <div className="summary-bill">
+              <div className="summary-row caption">
+                <span className="text-mute">Items Total</span>
+                <span>₹{cartTotal.toFixed(2)}</span>
+              </div>
+
+              <div className="summary-row caption">
+                <span className="text-mute">Delivery Partner Fee</span>
+                <span>
+                  {DELIVERY_FEE === 0 ? (
+                    <span className="text-success font-weight-bold">FREE</span>
+                  ) : (
+                    `₹${DELIVERY_FEE.toFixed(2)}`
+                  )}
                 </span>
               </div>
-              <p className="caption text-mute" style={{ color: '#007d48', marginTop: 2 }}>
-                You saved ₹{discountAmount.toFixed(2)} on this order
-              </p>
+
+              {discountAmount > 0 && (
+                <div className="summary-row caption summary-row--discount">
+                  <span className="text-success font-weight-bold">
+                    Coupon ({appliedCoupon?.code})
+                  </span>
+                  <span className="text-success font-weight-bold">
+                    -₹{discountAmount.toFixed(2)}
+                  </span>
+                </div>
+              )}
+
+              <hr className="divider" style={{ margin: '14px 0' }} />
+
+              <div className="summary-row summary-row--total">
+                <div>
+                  <span className="heading-sm">Grand Total</span>
+                  <p className="caption text-mute" style={{ fontSize: 11, marginTop: 2 }}>Incl. taxes & charges</p>
+                </div>
+                <span className="summary-total-price">₹{total.toFixed(2)}</span>
+              </div>
+
+              {discountAmount > 0 && (
+                <div className="summary-savings-pill">
+                  🎉 You are saving <strong>₹{discountAmount.toFixed(2)}</strong> on this order!
+                </div>
+              )}
             </div>
-            <button
-              type="button"
-              className="btn btn-secondary btn-sm"
-              onClick={handleRemoveCoupon}
-              style={{ color: '#d30005', borderColor: '#ffcdd2' }}
-            >
-              Remove
+
+            <button type="submit" className="btn btn-primary btn-lg checkout-submit-btn" disabled={loading}>
+              {loading ? (
+                <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
+                  <span className="btn-spinner" />
+                  Placing Order...
+                </span>
+              ) : (
+                <span className="checkout-submit-btn__inner">
+                  <span>Place Order</span>
+                  <span className="checkout-submit-btn__sep">·</span>
+                  <span>₹{total.toFixed(2)}</span>
+                </span>
+              )}
             </button>
-          </div>
-        )}
 
-        {/* Available coupons list */}
-        <div className="checkout-coupons-list">
-          {AVAILABLE_COUPONS.map((promo) => {
-            const isApplied = appliedCoupon?.code === promo.code;
-            const isEligible = !promo.minOrder || cartTotal >= promo.minOrder;
-
-            return (
-              <div
-                key={promo.code}
-                className={`checkout-coupon-card${isApplied ? ' applied' : ''}${!isEligible ? ' disabled' : ''}`}
-                style={isApplied ? { borderColor: '#007d48', background: '#f6fbf7' } : {}}
-              >
-                <div className="checkout-coupon-card__left">
-                  <div className="checkout-coupon-badge-row">
-                    <span className="checkout-coupon-card__code font-mono">{promo.code}</span>
-                    <span className="badge badge-sale" style={{ fontSize: 10, padding: '2px 6px' }}>
-                      {promo.discountText}
-                    </span>
-                    {promo.minOrder === 0 && (
-                      <span className="badge" style={{ fontSize: 10, padding: '2px 6px', background: '#e8f5e9', color: '#007d48' }}>
-                        NO MIN ORDER
-                      </span>
-                    )}
-                  </div>
-                  <p className="checkout-coupon-card__title">{promo.title}</p>
-                  <p className="checkout-coupon-card__desc">{promo.description}</p>
-                </div>
-
-                <div className="checkout-coupon-card__action">
-                  {isApplied ? (
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                      <span className="caption" style={{ color: '#007d48', fontWeight: 700 }}>
-                        APPLIED ✓
-                      </span>
-                      <button
-                        type="button"
-                        className="btn btn-secondary btn-sm"
-                        onClick={handleRemoveCoupon}
-                        style={{ padding: '4px 10px', fontSize: 12, color: '#d30005', borderColor: '#ffcdd2' }}
-                      >
-                        Remove
-                      </button>
-                    </div>
-                  ) : isEligible ? (
-                    <button
-                      type="button"
-                      className="btn btn-primary btn-sm checkout-coupon-apply-btn"
-                      onClick={() => handleApplyCoupon(promo.code)}
-                      style={{ padding: '6px 14px', fontSize: 13, fontWeight: 600 }}
-                    >
-                      Apply
-                    </button>
-                  ) : (
-                    <div style={{ textAlign: 'right' }}>
-                      <span className="caption text-mute" style={{ fontSize: 11, display: 'block', marginBottom: 2 }}>
-                        Add ₹{(promo.minOrder - cartTotal).toFixed(0)} more
-                      </span>
-                      <button
-                        type="button"
-                        className="btn btn-secondary btn-sm"
-                        onClick={() => handleApplyCoupon(promo.code)}
-                        style={{ fontSize: 12, padding: '4px 10px' }}
-                      >
-                        Apply
-                      </button>
-                    </div>
-                  )}
-                </div>
+            {/* Reassurance Badges */}
+            <div className="checkout-assurances">
+              <div className="checkout-assurance-item">
+                <span>🛡️</span>
+                <span className="caption text-mute">100% Secure & Contactless</span>
               </div>
-            );
-          })}
-        </div>
-      </section>
-
-      {/* Payment method */}
-      <section className="checkout-section">
-        <h2 className="checkout-section__title">Payment Method</h2>
-
-        <div className="payment-options">
-          <div className="payment-option selected" style={{ cursor: 'default' }}>
-            <div className="payment-option__body">
-              <span className="payment-option__icon">💵</span>
-              <div>
-                <p className="heading-sm">Cash on Delivery (COD)</p>
-                <p className="caption text-mute">Pay via cash or UPI when your food arrives at your door</p>
+              <div className="checkout-assurance-item">
+                <span>📍</span>
+                <span className="caption text-mute">Live Order Tracking</span>
               </div>
             </div>
           </div>
-        </div>
-      </section>
-
-      {/* Summary */}
-      <section className="checkout-section checkout-section--summary">
-        <h2 className="checkout-section__title">Order Summary</h2>
-        <div className="checkout-items">
-          {cart.map((item) => (
-            <div key={item._id} className="checkout-item caption">
-              <span>{item.quantity}× {item.name}</span>
-              <span>₹{(item.price * item.quantity).toFixed(2)}</span>
-            </div>
-          ))}
-        </div>
-        <hr className="divider" style={{ margin: '12px 0' }} />
-        <div className="checkout-item caption">
-          <span className="text-mute">Items total</span>
-          <span>₹{cartTotal.toFixed(2)}</span>
-        </div>
-        <div className="checkout-item caption">
-          <span className="text-mute">Delivery fee</span>
-          <span>{DELIVERY_FEE === 0 ? <span className="text-success">Free</span> : `₹${DELIVERY_FEE}`}</span>
-        </div>
-        {discountAmount > 0 && (
-          <div className="checkout-item caption" style={{ color: '#007d48', fontWeight: 600 }}>
-            <span>Coupon Discount ({appliedCoupon?.code})</span>
-            <span>-₹{discountAmount.toFixed(2)}</span>
-          </div>
-        )}
-        <div className="checkout-item checkout-item--total">
-          <span className="heading-sm">Total</span>
-          <span className="heading-sm">₹{total.toFixed(2)}</span>
-        </div>
-        {discountAmount > 0 && (
-          <p className="caption" style={{ color: '#007d48', marginTop: 4, textAlign: 'right', fontWeight: 600 }}>
-            🎉 You saved ₹{discountAmount.toFixed(2)} on this order!
-          </p>
-        )}
-      </section>
-
-      <button type="submit" className="btn btn-primary btn-lg checkout-submit" disabled={loading}>
-        {loading ? (
-          <span style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-            <span className="btn-spinner" />
-            Placing order...
-          </span>
-        ) : (
-          `Place Order — ₹${total.toFixed(2)}`
-        )}
-      </button>
+        </section>
+      </aside>
     </form>
   );
 };
@@ -462,8 +536,18 @@ const Checkout = () => {
   return (
     <main className="checkout-page page-enter">
       <div className="container">
-        <BackButton label="Back to Cart" to="/cart" />
-        <h1 className="heading-xl checkout-page__heading">Checkout</h1>
+        <div className="checkout-page__top-nav">
+          <BackButton label="Back to Cart" to="/cart" />
+        </div>
+        <div className="checkout-page__header-row">
+          <div>
+            <h1 className="heading-xl checkout-page__heading">Checkout</h1>
+            <p className="caption text-mute">Complete your order with quick delivery</p>
+          </div>
+          <span className="checkout-page__secure-badge">
+            🔒 256-Bit SSL Encrypted
+          </span>
+        </div>
         <CheckoutForm cart={cart} cartTotal={cartTotal} />
       </div>
     </main>
