@@ -1,0 +1,18 @@
+﻿<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <rect x="4" y="4" width="120" height="120" rx="28" fill="#111111"/>
+  <g fill="#FFFFFF" stroke="#FFFFFF" stroke-linecap="round" stroke-linejoin="round">
+    <!-- Fork Handle -->
+    <line x1="43" y1="60" x2="43" y2="98" stroke-width="6.5"/>
+    <!-- Fork Base -->
+    <path d="M 31 40 C 31 60 40 62 43 62 C 46 62 55 60 55 40 L 52 40 C 52 54 45 54 43 54 C 41 54 34 54 34 40 Z" stroke-width="0"/>
+    <!-- Fork Tines -->
+    <line x1="32.8" y1="24" x2="32.8" y2="48" stroke-width="3.6"/>
+    <line x1="39.6" y1="24" x2="39.6" y2="54" stroke-width="3.6"/>
+    <line x1="46.4" y1="24" x2="46.4" y2="54" stroke-width="3.6"/>
+    <line x1="53.2" y1="24" x2="53.2" y2="48" stroke-width="3.6"/>
+    <!-- Knife Handle -->
+    <line x1="83" y1="60" x2="83" y2="98" stroke-width="6.5"/>
+    <!-- Knife Blade -->
+    <path d="M 80 60 L 80 24 C 80 24 97 30 96 52 C 96 52 80 60 80 60 Z" stroke-width="0"/>
+  </g>
+</svg>
