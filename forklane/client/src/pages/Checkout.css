@@ -28,20 +28,6 @@
   line-height: 1.15;
 }
 
-.checkout-page__secure-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  background: var(--canvas);
-  border: 1px solid var(--hairline);
-  padding: 6px 14px;
-  border-radius: var(--radius-full);
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--ash);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
-}
-
 /* ── Two-Column Layout ── */
 .checkout-layout {
   display: grid;

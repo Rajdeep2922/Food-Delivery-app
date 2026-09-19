@@ -544,9 +544,6 @@ const Checkout = () => {
             <h1 className="heading-xl checkout-page__heading">Checkout</h1>
             <p className="caption text-mute">Complete your order with quick delivery</p>
           </div>
-          <span className="checkout-page__secure-badge">
-            🔒 256-Bit SSL Encrypted
-          </span>
         </div>
         <CheckoutForm cart={cart} cartTotal={cartTotal} />
       </div>
