@@ -2,7 +2,10 @@ import { useState, useEffect, useRef } from 'react';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useCart } from '../context/CartContext';
+import { productAPI } from '../services/api';
 import './Navbar.css';
+
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
 const Navbar = () => {
   const { user, isAuthenticated, logout } = useAuth();
@@ -11,8 +14,12 @@ const Navbar = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [searchSuggestions, setSearchSuggestions] = useState([]);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [loadingSuggestions, setLoadingSuggestions] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const searchRef = useRef(null);
+  const searchContainerRef = useRef(null);
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 12);
@@ -24,6 +31,42 @@ const Navbar = () => {
     if (searchOpen && searchRef.current) searchRef.current.focus();
   }, [searchOpen]);
 
+  // Click outside to close navbar search dropdown
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (searchContainerRef.current && !searchContainerRef.current.contains(e.target)) {
+        setDropdownOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  // Live instant search with debounce
+  useEffect(() => {
+    const trimmed = searchQuery.trim();
+    if (!trimmed || !searchOpen) {
+      setSearchSuggestions([]);
+      setDropdownOpen(false);
+      return;
+    }
+
+    const timer = setTimeout(async () => {
+      setLoadingSuggestions(true);
+      try {
+        const { data } = await productAPI.getAll({ search: trimmed });
+        setSearchSuggestions(data.products?.slice(0, 5) || []);
+        setDropdownOpen(true);
+      } catch {
+        setSearchSuggestions([]);
+      } finally {
+        setLoadingSuggestions(false);
+      }
+    }, 200);
+
+    return () => clearTimeout(timer);
+  }, [searchQuery, searchOpen]);
+
   const handleLogout = () => {
     logout();
     setMobileOpen(false);
@@ -33,10 +76,31 @@ const Navbar = () => {
   const handleSearch = (e) => {
     e.preventDefault();
     if (searchQuery.trim()) {
+      setDropdownOpen(false);
+      setSearchOpen(false);
       navigate(`/menu?search=${encodeURIComponent(searchQuery.trim())}`);
       setSearchQuery('');
-      setSearchOpen(false);
     }
+  };
+
+  const handleSelectSuggestion = (productId) => {
+    setDropdownOpen(false);
+    setSearchOpen(false);
+    setSearchQuery('');
+    navigate(`/product/${productId}`);
+  };
+
+  const highlightMatch = (text, match) => {
+    if (!match || !match.trim()) return text;
+    const escaped = match.trim().replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const parts = text.split(new RegExp(`(${escaped})`, 'gi'));
+    return parts.map((part, i) =>
+      part.toLowerCase() === match.toLowerCase() ? (
+        <mark key={i} className="search-highlight">{part}</mark>
+      ) : (
+        part
+      )
+    );
   };
 
   const closeMobile = () => setMobileOpen(false);
@@ -83,34 +147,98 @@ const Navbar = () => {
           {/* Right actions */}
           <div className="navbar__actions">
             {/* Search */}
-            <form
-              onSubmit={handleSearch}
-              className={`navbar__search-form${searchOpen ? ' open' : ''}`}
-              role="search"
-            >
-              <input
-                ref={searchRef}
-                type="search"
-                placeholder="Search dishes..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="navbar__search-input"
-                aria-label="Search food"
-              />
-              <button type="submit" className="btn btn-icon navbar__action-btn" aria-label="Submit search">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-              </button>
-            </form>
-
-            {!searchOpen && (
-              <button
-                className="btn btn-icon navbar__action-btn"
-                onClick={() => setSearchOpen(true)}
-                aria-label="Open search"
+            <div className="navbar__search-wrap" ref={searchContainerRef}>
+              <form
+                onSubmit={handleSearch}
+                className={`navbar__search-form${searchOpen ? ' open' : ''}`}
+                role="search"
               >
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-              </button>
-            )}
+                <input
+                  ref={searchRef}
+                  type="search"
+                  placeholder="Search dishes..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  onFocus={() => {
+                    if (searchSuggestions.length > 0 && searchQuery.trim()) setDropdownOpen(true);
+                  }}
+                  className="navbar__search-input"
+                  aria-label="Search food"
+                  autoComplete="off"
+                />
+                <button type="submit" className="btn btn-icon navbar__action-btn" aria-label="Submit search">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+                </button>
+              </form>
+
+              {!searchOpen && (
+                <button
+                  className="btn btn-icon navbar__action-btn"
+                  onClick={() => setSearchOpen(true)}
+                  aria-label="Open search"
+                >
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+                </button>
+              )}
+
+              {/* Live search dropdown */}
+              {dropdownOpen && searchOpen && searchQuery.trim().length > 0 && (
+                <div className="navbar__search-dropdown" role="listbox">
+                  <div className="navbar__search-dropdown-header">
+                    {loadingSuggestions ? 'Searching dishes...' : `Matches for "${searchQuery.trim()}"`}
+                  </div>
+
+                  {searchSuggestions.length > 0 ? (
+                    <>
+                      {searchSuggestions.map((item) => {
+                        const img = item.image
+                          ? item.image.startsWith('http')
+                            ? item.image
+                            : `${API_URL}${item.image}`
+                          : 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=100&q=80';
+
+                        return (
+                          <div
+                            key={item._id}
+                            className="navbar__search-dropdown-item"
+                            onClick={() => handleSelectSuggestion(item._id)}
+                            role="option"
+                            tabIndex={0}
+                            onKeyDown={(e) => {
+                              if (e.key === 'Enter') handleSelectSuggestion(item._id);
+                            }}
+                          >
+                            <img src={img} alt={item.name} className="navbar__search-dropdown-thumb" />
+                            <div className="navbar__search-dropdown-info">
+                              <p className="navbar__search-dropdown-name">{highlightMatch(item.name, searchQuery)}</p>
+                              <p className="navbar__search-dropdown-meta">{item.category}</p>
+                            </div>
+                            <span className="navbar__search-dropdown-price">₹{item.price}</span>
+                          </div>
+                        );
+                      })}
+
+                      <div
+                        className="navbar__search-dropdown-footer"
+                        onClick={() => {
+                          setDropdownOpen(false);
+                          setSearchOpen(false);
+                          navigate(`/menu?search=${encodeURIComponent(searchQuery.trim())}`);
+                          setSearchQuery('');
+                        }}
+                      >
+                        <span>View all results for "{searchQuery.trim()}"</span>
+                        <span>→</span>
+                      </div>
+                    </>
+                  ) : !loadingSuggestions ? (
+                    <div className="navbar__search-dropdown-empty">
+                      No dishes found matching "{searchQuery.trim()}"
+                    </div>
+                  ) : null}
+                </div>
+              )}
+            </div>
 
             {/* Cart */}
             <Link to="/cart" className="btn btn-icon navbar__action-btn navbar__cart-btn" aria-label={`Cart, ${cartCount} items`}>

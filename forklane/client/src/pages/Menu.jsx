@@ -6,6 +6,7 @@ import CategoryFilter from '../components/CategoryFilter';
 import SearchBar from '../components/SearchBar';
 import { ProductGridSkeleton } from '../components/Loading';
 import EmptyState from '../components/EmptyState';
+import BackButton from '../components/BackButton';
 import './Menu.css';
 
 const Menu = () => {
@@ -44,27 +45,29 @@ const Menu = () => {
     setSearchParams(newParams);
   };
 
-  const handleSearch = (query) => {
+  const handleSearch = useCallback((query) => {
     const newParams = new URLSearchParams();
     if (category !== 'All') newParams.set('category', category);
     if (query) newParams.set('search', query);
-    setSearchParams(newParams);
-  };
+    setSearchParams(newParams, { replace: true });
+  }, [category, setSearchParams]);
 
-  const heading = search
-    ? `Results for "${search}"`
-    : category !== 'All'
-    ? category
-    : 'Full Menu';
+  const heading = category !== 'All' ? category : 'Full Menu';
 
   return (
     <main className="menu-page page-enter">
       <div className="container">
+        <BackButton label="Back to Home" to="/" />
         {/* Header */}
         <div className="menu-page__header">
-          <h1 className="heading-xl">{heading}</h1>
-          <p className="caption text-mute">
-            {loading ? 'Loading...' : `${products.length} dish${products.length !== 1 ? 'es' : ''}`}
+          <div>
+            <h1 className="heading-xl">{heading}</h1>
+            <p className="caption text-mute">Freshly prepared, delivered to your door</p>
+          </div>
+          <p className="caption text-mute menu-page__count">
+            {loading && products.length === 0
+              ? 'Loading...'
+              : `${products.length} dish${products.length !== 1 ? 'es' : ''}`}
           </p>
         </div>
 
@@ -73,6 +76,24 @@ const Menu = () => {
           <SearchBar initialValue={search} onSearch={handleSearch} />
           <CategoryFilter active={category} onChange={handleCategoryChange} />
         </div>
+
+        {/* Active search banner */}
+        {search && (
+          <div className="menu-search-tag">
+            <span>
+              Showing results for <strong>"{search}"</strong>{' '}
+              <span className="text-mute">({products.length} found)</span>
+            </span>
+            <button
+              type="button"
+              className="menu-search-tag__clear"
+              onClick={() => handleSearch('')}
+              aria-label="Clear search"
+            >
+              ✕ Clear
+            </button>
+          </div>
+        )}
 
         {/* Grid */}
         <div className="menu-page__grid-wrap">
@@ -84,22 +105,25 @@ const Menu = () => {
               actionLabel="Try Again"
               onAction={fetchProducts}
             />
-          ) : loading ? (
+          ) : loading && products.length === 0 ? (
             <ProductGridSkeleton count={8} />
           ) : products.length === 0 ? (
-            <EmptyState
-              icon="🍽️"
-              title="No dishes found"
-              description={
-                search || category !== 'All'
-                  ? 'Try adjusting your search or category filter.'
-                  : 'The menu is being updated. Check back soon!'
-              }
-              actionLabel="Clear filters"
-              onAction={() => setSearchParams({})}
-            />
+            <div className="menu-empty-search">
+              <span className="menu-empty-search__icon">🔍</span>
+              <h3 className="heading-md">No dishes found for "{search || category}"</h3>
+              <p className="caption text-mute">
+                Try searching for something else like "burger", "pizza", or browse another category.
+              </p>
+              <button
+                type="button"
+                className="btn btn-secondary btn-sm"
+                onClick={() => setSearchParams({})}
+              >
+                View Full Menu
+              </button>
+            </div>
           ) : (
-            <div className="product-grid">
+            <div className={`product-grid${loading ? ' product-grid--loading' : ''}`}>
               {products.map((product) => (
                 <FoodCard key={product._id} product={product} />
               ))}
